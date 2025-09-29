@@ -1,0 +1,47 @@
+- JavaScript uses abstract operations to convert values between types, a process called _coercion_. 
+- these operations are like recipes the language follows to handle type mismatches. 
+## `toString`: turning values into strings
+- converts any value into its string representation.
+- **primitives**:
+    - `null` → `"null"`
+    - `undefined` → `"undefined"`
+    - `true` → `"true"`
+    - `42` → `"42"`
+    - `-0` → `"0"` (loses the negative sign).
+- **objects/arrays**:
+    - Objects: `"[object Object]"` by default.
+    - Arrays: joins elements with commas, no brackets. 
+	    - `[]` → `""`
+	    - `[1, null, 3]` → `"1,,3"`.
+- **quirks**:
+    - arrays skip brackets, making `[]` and `[null]` both "".
+    - useful for debugging but unreliable in production due to inconsistencies.
+## `toNumber`: converting to numbers
+- turns values into numbers, with some surprising results.
+- **strings**:
+    - `""` → `0` (controversial, should it be NaN?)
+    - `"0"` → `0`, `"-0"` → `-0`
+    - `" 009 "` → `9` (strips whitespace, leading zeros)
+    - `"3.14"` → `3.14`, `"0xFF"` → `255`
+    - `"not a number"` → `NaN`
+- **other primitives**:
+    - `false` → `0`, `true` → `1`
+    - `null` → `0`, `undefined` → `NaN`
+- **objects/arrays**:        
+    - `[]` → `""` → `0`
+    - `[1]` → `"1"` → `1`
+    - `[null]` or `[undefined]` → `""` → `0`
+    - `{}` → `"[object Object]"` → `NaN`
+- **quirks**:    
+    - empty string becoming `0` causes bugs, as it implies a value where none exists.
+## `toBoolean`: truthy or falsy
+- converts values to true (truthy) or false (falsy) via a simple lookup.
+- **falsy values**:
+    - `false`, `0`, `-0`, `""`, `null`, `undefined`, `NaN`.  
+- **truthy values**:    
+    - everything else, e.g., `"hello"`, `42`, `[]`, `{}`, `function() {}`. 
+- **key point**:
+    - no coercion to strings/numbers. it’s just a check against the falsy list.
+## why it matters
+- coercion explains JavaScript’s quirks, like `[] + []` → `""` or `[null]` → `0`. 
+- understanding these operations helps you write predictable code and avoid pitfalls. 
